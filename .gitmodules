@@ -1,0 +1,6 @@
+[submodule "app/resize-observer-polyfill"]
+	path = app/resize-observer-polyfill
+	url = https://github.com/que-etc/resize-observer-polyfill
+[submodule "webapp/resize-observer-polyfill"]
+	path = webapp/resize-observer-polyfill
+	url = https://github.com/que-etc/resize-observer-polyfill.git

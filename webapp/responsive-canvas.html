@@ -1,0 +1,54 @@
+<template id="template-responsive-canvas">
+	<style>
+		:host {
+			display: block;
+			font-size: 0;
+		}
+		canvas {
+			position: absolute;
+		}
+	</style>
+	<canvas></canvas>
+</template>
+
+<script>
+class ResponsiveCanvas extends HTMLElement
+{
+	constructor ()
+	{
+		super();
+
+		const root = this.attachShadow({mode:"open"});
+		const template = document.querySelector("#template-responsive-canvas");
+
+		root.appendChild(template.content.cloneNode(true));
+
+		this.canvas = root.querySelector("canvas");
+		this.ctx = this.canvas.getContext("2d");
+		this.width = this.canvas.width = 0;
+		this.height = this.canvas.height = 0;
+		this.resizeObserver = new ResizeObserver((entries)=>{
+			let entry = entries[0];
+			this.width = this.canvas.width = Math.ceil(entry.contentRect.width);
+			this.height = this.canvas.height = Math.ceil(entry.contentRect.height);
+			this.resizedCallback();
+		});
+		this.resizeObserver.observe(this);
+	}
+
+	disconnectedCallback ()
+	{
+		this.resizeObserver.disconnect();
+	}
+
+	resizedCallback ()
+	{
+		/* can be implemented by extender */
+	}
+}
+
+window.customElements.define(
+	"responsive-canvas",
+	ResponsiveCanvas
+);
+</script>

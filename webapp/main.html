@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ssetop</title>
+		<script src="resize-observer-polyfill/dist/ResizeObserver.js"></script>
+		<link rel="import" href="sse-top.html"/>
+		<style>
+			html, body {
+				box-sizing: border-box;
+				width: 100%;
+				padding: 0;
+				margin: 0;
+				font-size: 8pt;
+				font-family: monospace;
+				background: #333;
+				color: #000;
+			}
+			body {
+				padding: 0.5em;
+			}
+			.my-theme {
+				--bar-background: #000;
+				--bar-color: hsla(120, 100%, 30%, 0.4);
+				--fade-color: hsla(0, 100%, 0%, 0.15);
+				--mem-used-color: #4581b3;
+				--mem-buffer-color: #37658c;
+				--mem-cached-color: #284a66;
+				--multi-bar-color: var(--mem-user-color);
+			}
+		</style>
+	</head>
+	<body>
+		<sse-top class="my-theme" stream-url="/event-stream"></sse-top>
+	</body>
+</html>

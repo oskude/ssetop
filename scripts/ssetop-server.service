@@ -1,0 +1,8 @@
+[Unit]
+Description=ssetop server
+
+[Service]
+ExecStart=/usr/bin/ssetop-server
+
+[Install]
+WantedBy=multi-user.target

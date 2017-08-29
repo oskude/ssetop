@@ -1,0 +1,100 @@
+<link rel="import" href="heat-bar.html"/>
+<link rel="import" href="memory-bar.html"/>
+
+<template id="template-total-usage">
+	<style>
+		.total-cpu-usage {
+			height: 0.75rem;
+			margin-bottom: 1px;
+		}
+		#total-mem-usage {
+			height: 0.75rem;
+			margin-bottom: 1px;
+			background: var(--bar-background);
+		}
+	</style>
+	<div id="total-cpu-usage"></div>
+	<memory-bar id="total-mem-usage"></memory-bar>
+</template>
+
+<template id="template-total-cpu-entry">
+	<heat-bar class="total-cpu-usage"></heat-bar>
+</template>
+
+<script>
+class TotalUsage extends HTMLElement
+{
+	constructor ()
+	{
+		super();
+
+		const root = this.attachShadow({mode:"open"});
+		const template = document.querySelector('#template-total-usage');
+
+		root.appendChild(template.content.cloneNode(true));
+
+		this.totalCpuUsageRoot = root.querySelector("#total-cpu-usage");
+		this.totalCpuEntryTemplate = document.querySelector("#template-total-cpu-entry");
+		this.totalMemUsage = root.querySelector("#total-mem-usage");
+
+		this.state = {
+			tick: 0,
+			interval: 0,
+			pageSize: 0,
+			maxPages: 0,
+			numCpus: 0,
+			maxCpu: 0
+		}
+	}
+
+	set config (v)
+	{
+		this.state.tick = v.tick;
+		this.state.interval = v.interval;
+		this.state.pageSize = v.pageSize;
+		this.state.maxPages = v.maxPages;
+		this.state.numCpus = v.numCpus;
+		this.state.maxCpu = v.maxCpu;
+		this.createCpuUsage();
+	}
+
+	set cpu (v)
+	{
+		for (let cnum = 0; cnum < v.length; cnum++) {
+			this.state.cpuList[cnum].ele.cpuElem.value = v[cnum];
+		}
+	}
+
+	set mem (v)
+	{
+		this.totalMemUsage.value = v;
+	}
+
+	createCpuUsage ()
+	{
+		this.state.cpuList = {};
+		this.totalCpuUsageRoot.innerHTML = "";
+
+		for (let cnum = 0; cnum < this.state.numCpus; cnum++) {
+			let cloneElem = document.importNode(this.totalCpuEntryTemplate.content, true);
+			let cpuElem = cloneElem.querySelector(".total-cpu-usage");
+
+			this.totalCpuUsageRoot.appendChild(cloneElem);
+
+			this.state.cpuList[cnum] = {
+				val: {
+					cpu: 0
+				},
+				ele: {
+					cpuElem: cpuElem
+				}
+			};
+		}
+	}
+}
+
+window.customElements.define(
+	'total-usage',
+	TotalUsage
+);
+</script>
