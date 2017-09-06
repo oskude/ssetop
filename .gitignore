@@ -1,11 +1,6 @@
 ssetop-server
 ssetop-client
 client-build
-node_modules
-
-docs/**
-!docs/webapp
-!docs/webapp/.gitkeep
 
 distro/**
 !distro/archlinux
