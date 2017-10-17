@@ -145,7 +145,7 @@ class ProcessList extends HTMLElement
 			let cpuUsage = (data.cpu - process.val.cpu) / this.state.maxCpu;
 			process.val.cpu = data.cpu;
 
-			if (cpuUsage > 0) {
+			if (cpuUsage > 0 || data.mem > 64) { // TODO
 				process.ele.root.classList.remove("strike-out");
 				process.val.strikeOut = 0;
 			} else {
