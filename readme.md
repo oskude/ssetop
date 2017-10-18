@@ -2,6 +2,8 @@
 
 ssetop is a responsive server/client based linux process monitor…
 
+![screenshot](screenshot.gif?raw=true)
+
 sorry, the insides don't give me a warm fuzzy feeling yet, so documentation has to wait.
 
 but curious people can:
