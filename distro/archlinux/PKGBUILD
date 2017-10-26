@@ -16,12 +16,6 @@ makedepends=(
 	'libmicrohttpd'
 )
 
-prepare () {
-	cd "$pkgname"
-	git submodule init
-	git submodule update
-}
-
 build() {
 	cd "$pkgname"
 	make

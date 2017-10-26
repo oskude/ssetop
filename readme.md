@@ -9,7 +9,7 @@ sorry, the insides don't give me a warm fuzzy feeling yet, so documentation has 
 but curious people can:
 
 ```
-git clone --recursive https://github.com/oskude/ssetop
+git clone https://github.com/oskude/ssetop
 cd ssetop
 make
 APP_ROOT="$PWD/webapp/" HTTP_ADDRESS=127.0.0.1 HTTP_PORT=55370 ./ssetop-server
