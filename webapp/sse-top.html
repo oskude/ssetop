@@ -40,6 +40,17 @@ class SseTop extends HTMLElement
 		}
 	}
 
+	connectedCallback ()
+	{
+		window.addEventListener("beforeunload", this.disconnect.bind(this));
+	}
+
+	disconnectedCallback ()
+	{
+		window.removeEventListener("beforeunload", this.disconnect.bind(this));
+		this.disconnect();
+	}
+
 	attributeChangedCallback(name, oldValue, newValue)
 	{
 		switch (name) {
