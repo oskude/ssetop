@@ -275,11 +275,17 @@ void concat_possible_html_imports (
 
 	in_stream = fopen(input_path, "r");
 
+	if (in_stream == NULL) {
+		printf("html-import file not found: %s\n", input_path);
+		return;
+	}
+
 	while ((nread = getline(&line, &len, in_stream)) != -1) {
 		reti = regexec(&regex, line, 2, pmatch, REG_EXTENDED);
 		if (!reti) {
 			char *import_file = strndup(line + pmatch[1].rm_so, pmatch[1].rm_eo - pmatch[1].rm_so);
 			char *import_path = dirname(input_path);
+			strcpy(import_path, app_root);
 			strcat(import_path, "/");
 			strcat(import_path, import_file);
 			// TODO: do not concat file that is already concatted...

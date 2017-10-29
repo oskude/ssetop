@@ -1,5 +1,5 @@
-<link rel="import" href="heat-bar.html"/>
-<link rel="import" href="memory-bar.html"/>
+<link rel="import" href="/oskude/ssetop/heat-bar.html"/>
+<link rel="import" href="/oskude/ssetop/memory-bar.html"/>
 
 <template id="template-total-usage">
 	<style>
@@ -14,15 +14,15 @@
 		}
 	</style>
 	<div id="total-cpu-usage"></div>
-	<memory-bar id="total-mem-usage"></memory-bar>
+	<oskude-ssetop-memory-bar id="total-mem-usage"></oskude-ssetop-memory-bar>
 </template>
 
 <template id="template-total-cpu-entry">
-	<heat-bar class="total-cpu-usage"></heat-bar>
+	<oskude-ssetop-heat-bar class="total-cpu-usage"></oskude-ssetop-heat-bar>
 </template>
 
 <script>
-class TotalUsage extends HTMLElement
+class OskudeSsetopTotalUsage extends HTMLElement
 {
 	constructor ()
 	{
@@ -94,7 +94,7 @@ class TotalUsage extends HTMLElement
 }
 
 window.customElements.define(
-	'total-usage',
-	TotalUsage
+	'oskude-ssetop-total-usage',
+	OskudeSsetopTotalUsage
 );
 </script>

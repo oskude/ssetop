@@ -1,5 +1,5 @@
-<link rel="import" href="heat-bar.html"/>
-<link rel="import" href="multi-bar.html"/>
+<link rel="import" href="/oskude/ssetop/heat-bar.html"/>
+<link rel="import" href="/oskude/ssetop/multi-bar.html"/>
 
 <template id="template-process-list">
 	<style>
@@ -43,18 +43,18 @@
 <template id="template-process-entry">
 	<div class="process-entry strike-out">
 		<div class="cmd-name"></div>
-		<multi-bar class="mem-usage"
+		<oskude-ssetop-multi-bar class="mem-usage"
 			max-value="64"
 			line-space="2"
 			direction="up"
 			start-from="right"
-		></multi-bar>
-		<heat-bar class="cpu-usage"></heat-bar>
+		></oskude-ssetop-multi-bar>
+		<oskude-ssetop-heat-bar class="cpu-usage"></oskude-ssetop-heat-bar>
 	</div>
 </template>
 
 <script>
-class ProcessList extends HTMLElement
+class OskudeSsetopProcessList extends HTMLElement
 {
 	constructor ()
 	{
@@ -168,7 +168,7 @@ class ProcessList extends HTMLElement
 }
 
 window.customElements.define(
-	'process-list',
-	ProcessList
+	'oskude-ssetop-process-list',
+	OskudeSsetopProcessList
 );
 </script>

@@ -28,15 +28,21 @@ clean:
 install:
 	install -D -m755 ssetop-server "$(DESTDIR)$(PREFIX)/bin/ssetop-server"
 	install -D -m755 ssetop-client "$(DESTDIR)$(PREFIX)/bin/ssetop-client"
-	install -d "$(DESTDIR)$(PREFIX)/share/ssetop/webapp"
+	install -d "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/ssetop"
 	install -D webapp/*.html "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/"
+	install -D webapp/oskude/*.html "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/"
+	install -D webapp/oskude/ssetop/*.html "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/ssetop/"
 	install -D -m644 scripts/ssetop-server.service "$(DESTDIR)$(PREFIX)/lib/systemd/system/ssetop-server.service"
 	install -D -m644 scripts/ssetop-client.desktop "$(DESTDIR)$(PREFIX)/share/applications/ssetop-client.desktop"
 
 uninstall:
 	rm -f "$(DESTDIR)$(PREFIX)/bin/ssetop-server"
 	rm -f "$(DESTDIR)$(PREFIX)/bin/ssetop-client"
+	rm -f "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/ssetop/"*.html
+	rm -f "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/"*.html
 	rm -f "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/"*.html
+	rmdir "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/ssetop" || true
+	rmdir "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude" || true
 	rmdir "$(DESTDIR)$(PREFIX)/share/ssetop/webapp" || true
 	rm -f "$(DESTDIR)$(PREFIX)/lib/systemd/system/ssetop-server.service"
 	rm -f "$(DESTDIR)$(PREFIX)/share/applications/ssetop-client.desktop"
