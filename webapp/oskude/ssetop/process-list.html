@@ -59,15 +59,13 @@ class OskudeSsetopProcessList extends HTMLElement
 	constructor ()
 	{
 		super();
-
 		const root = this.attachShadow({mode:"open"});
 		const tpl = document.querySelector('#template-process-list');
 
 		root.appendChild(tpl.content.cloneNode(true));
-
 		this.entryRoot = root.querySelector("#entry-root");
 		this.processEntryTemplate = document.querySelector("#template-process-entry");
-
+		this.type = "process-list";
 		this.state = {
 			tick: 0,
 			interval: 0,

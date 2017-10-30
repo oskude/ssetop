@@ -1,31 +1,9 @@
-<link rel="import" href="/oskude/ssetop/total-usage.html"/>
-<link rel="import" href="/oskude/ssetop/process-list.html"/>
-
-<template id="oskude-ssetop">
-	<style>
-		:host {
-			display: block;
-			contain: content;
-		}
-	</style>
-	<oskude-ssetop-total-usage></oskude-ssetop-total-usage>
-	<oskude-ssetop-process-list></oskude-ssetop-process-list>
-</template>
-
 <script>
 class OskudeSsetop extends HTMLElement
 {
 	constructor ()
 	{
 		super();
-
-		const root = this.attachShadow({mode:"open"});
-		const template = document.querySelector("#oskude-ssetop");
-
-		root.appendChild(template.content.cloneNode(true));
-
-		this.processList = root.querySelector("oskude-ssetop-process-list");
-		this.totalUsage = root.querySelector("oskude-ssetop-total-usage");
 
 		this.state = {
 			config: {
@@ -43,12 +21,28 @@ class OskudeSsetop extends HTMLElement
 	connectedCallback ()
 	{
 		window.addEventListener("beforeunload", this.disconnect.bind(this));
+		this._mo = new MutationObserver((muts)=>{
+			muts.forEach((m)=>{
+				m.addedNodes.forEach((n)=>{
+					if (n.type == "total-usage") {
+						this.totalUsage = n;
+					} else if (n.type == "process-list") {
+						this.processList = n;
+					}
+				});
+			});
+		});
+
+		this._mo.observe(this, {
+			childList: true
+		});
 	}
 
 	disconnectedCallback ()
 	{
 		window.removeEventListener("beforeunload", this.disconnect.bind(this));
 		this.disconnect();
+		this._mo.disconnect();
 	}
 
 	attributeChangedCallback(name, oldValue, newValue)

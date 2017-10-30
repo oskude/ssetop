@@ -27,16 +27,14 @@ class OskudeSsetopTotalUsage extends HTMLElement
 	constructor ()
 	{
 		super();
-
 		const root = this.attachShadow({mode:"open"});
 		const template = document.querySelector('#template-total-usage');
 
 		root.appendChild(template.content.cloneNode(true));
-
 		this.totalCpuUsageRoot = root.querySelector("#total-cpu-usage");
 		this.totalCpuEntryTemplate = document.querySelector("#template-total-cpu-entry");
 		this.totalMemUsage = root.querySelector("#total-mem-usage");
-
+		this.type = "total-usage";
 		this.state = {
 			tick: 0,
 			interval: 0,

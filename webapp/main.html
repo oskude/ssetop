@@ -4,6 +4,8 @@
 		<meta charset="utf-8">
 		<title>ssetop</title>
 		<link rel="import" href="/oskude/ssetop.html"/>
+		<link rel="import" href="/oskude/ssetop/total-usage.html"/>
+		<link rel="import" href="/oskude/ssetop/process-list.html"/>
 		<style>
 			html, body {
 				box-sizing: border-box;
@@ -30,6 +32,9 @@
 		</style>
 	</head>
 	<body>
-		<oskude-ssetop class="my-theme" stream-url="/event-stream"></oskude-ssetop>
+		<oskude-ssetop class="my-theme" stream-url="/event-stream">
+			<oskude-ssetop-total-usage></oskude-ssetop-total-usage>
+			<oskude-ssetop-process-list></oskude-ssetop-process-list>
+		</oskude-ssetop>
 	</body>
 </html>
