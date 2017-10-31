@@ -24,8 +24,10 @@ class OskudeSsetop extends HTMLElement
 		this._mo = new MutationObserver((muts)=>{
 			muts.forEach((m)=>{
 				m.addedNodes.forEach((n)=>{
-					if (n.type == "total-usage") {
-						this.totalUsage = n;
+					if (n.type == "total-cpu") {
+						this.totalCpu = n;
+					} else if (n.type == "total-mem") {
+						this.totalMem = n;
 					} else if (n.type == "process-list") {
 						this.processList = n;
 					}
@@ -120,7 +122,7 @@ class OskudeSsetop extends HTMLElement
 		this.state.config.numCpus = parseInt(data[4], 10);
 		this.state.config.maxCpu = this.state.config.tick / (1000 / this.state.config.interval);
 
-		this.totalUsage.config = this.state.config;
+		this.totalCpu.config = this.state.config;
 		this.processList.config = this.state.config;
 
 		this.jiffies = [];
@@ -175,7 +177,7 @@ class OskudeSsetop extends HTMLElement
 			this.jiffies[cnum][1] = jiffWork;
 		}
 
-		this.totalUsage.cpu = totalCpuData;
+		this.totalCpu.cpu = totalCpuData;
 	}
 
 	onServerTotalMem (e)
@@ -195,7 +197,7 @@ class OskudeSsetop extends HTMLElement
 		let cachedPercent = cached / total;
 		usedPercent -= (buffersPercent + cachedPercent);
 
-		this.totalUsage.mem = {
+		this.totalMem.mem = {
 			used: usedPercent,
 			buffers: buffersPercent,
 			cached: cachedPercent

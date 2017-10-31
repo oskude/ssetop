@@ -1,0 +1,38 @@
+<link rel="import" href="/oskude/ssetop/memory-bar.html"/>
+
+<template id="template-total-mem">
+	<style>
+		#total-mem-usage {
+			height: 0.75rem;
+			margin-bottom: 1px;
+			background: var(--bar-background);
+		}
+	</style>
+	<oskude-ssetop-memory-bar id="total-mem-usage"></oskude-ssetop-memory-bar>
+</template>
+
+<script>
+class OskudeSsetopTotalMem extends HTMLElement
+{
+	constructor ()
+	{
+		super();
+		const root = this.attachShadow({mode:"open"});
+		const template = document.querySelector('#template-total-mem');
+
+		root.appendChild(template.content.cloneNode(true));
+		this.totalMemUsage = root.querySelector("#total-mem-usage");
+		this.type = "total-mem";
+	}
+
+	set mem (v)
+	{
+		this.totalMemUsage.value = v;
+	}
+}
+
+window.customElements.define(
+	'oskude-ssetop-total-mem',
+	OskudeSsetopTotalMem
+);
+</script>
