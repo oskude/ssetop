@@ -1,12 +1,10 @@
-<link rel="import" href="/oskude/ssetop/responsive-canvas.html"/>
+import {OskudeSsetopResponsiveCanvas} from "/oskude/ssetop/responsive-canvas.js";
 
-<script>
-class OskudeSsetopMultiBar extends OskudeSsetopResponsiveCanvas
+export class OskudeSsetopMultiBar extends OskudeSsetopResponsiveCanvas
 {
 	constructor ()
 	{
 		super();
-
 		this.state = {
 			value: -1,
 			color: "hsla(220, 100%, 70%, 0.6)",
@@ -130,4 +128,3 @@ window.customElements.define(
 	'oskude-ssetop-multi-bar',
 	OskudeSsetopMultiBar
 );
-</script>

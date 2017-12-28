@@ -1,29 +1,22 @@
-<template id="template-responsive-canvas">
-	<style>
-		:host {
-			display: block;
-			font-size: 0;
-		}
-		canvas {
-			position: absolute;
-		}
-	</style>
-	<canvas></canvas>
-</template>
-
-<script>
-class OskudeSsetopResponsiveCanvas extends HTMLElement
+export class OskudeSsetopResponsiveCanvas extends HTMLElement
 {
 	constructor ()
 	{
 		super();
-
-		const root = this.attachShadow({mode:"open"});
-		const template = document.querySelector("#template-responsive-canvas");
-
-		root.appendChild(template.content.cloneNode(true));
-
-		this.canvas = root.querySelector("canvas");
+		this.attachShadow({mode:"open"});
+		this.shadowRoot.innerHTML = `
+			<style>
+				:host {
+					display: block;
+					font-size: 0;
+				}
+				canvas {
+					position: absolute;
+				}
+			</style>
+			<canvas></canvas>
+		`;
+		this.canvas = this.shadowRoot.querySelector("canvas");
 		this.ctx = this.canvas.getContext("2d");
 		this.width = this.canvas.width = 0;
 		this.height = this.canvas.height = 0;
@@ -51,4 +44,3 @@ window.customElements.define(
 	"oskude-ssetop-responsive-canvas",
 	OskudeSsetopResponsiveCanvas
 );
-</script>

@@ -1,12 +1,10 @@
-<link rel="import" href="/oskude/ssetop/responsive-canvas.html"/>
+import {OskudeSsetopResponsiveCanvas} from "/oskude/ssetop/responsive-canvas.js";
 
-<script>
-class OskudeSsetopMemoryBar extends OskudeSsetopResponsiveCanvas
+export class OskudeSsetopMemoryBar extends OskudeSsetopResponsiveCanvas
 {
 	constructor ()
 	{
 		super();
-
 		this.state = {
 			usedColor: "#4581b3",
 			cachedColor: "#284a66",
@@ -74,4 +72,3 @@ window.customElements.define(
 	'oskude-ssetop-memory-bar',
 	OskudeSsetopMemoryBar
 );
-</script>

@@ -1,10 +1,13 @@
-<script>
+import {OskudeSsetopTotalCpu} from "/oskude/ssetop/total-cpu.js";
+import {OskudeSsetopTotalMem} from "/oskude/ssetop/total-mem.js";
+import {OskudeSsetopProcessList} from "/oskude/ssetop/process-list.js";
+
 class OskudeSsetop extends HTMLElement
 {
 	constructor ()
 	{
 		super();
-
+		this.jiffies = [];
 		this.state = {
 			config: {
 				tick: 0,
@@ -18,26 +21,34 @@ class OskudeSsetop extends HTMLElement
 		}
 	}
 
+	_mutationObserver (muts)
+	{
+		muts.forEach((m)=>{
+			m.addedNodes.forEach((n)=>{
+				if (n.type == "total-cpu") {
+					this.totalCpu = n;
+					this.totalCpu.config = this.state.config;
+				} else if (n.type == "total-mem") {
+					this.totalMem = n;
+				} else if (n.type == "process-list") {
+					this.processList = n;
+					this.processList.config = this.state.config;
+				}
+			});
+		});
+	}
+
 	connectedCallback ()
 	{
 		window.addEventListener("beforeunload", this.disconnect.bind(this));
-		this._mo = new MutationObserver((muts)=>{
-			muts.forEach((m)=>{
-				m.addedNodes.forEach((n)=>{
-					if (n.type == "total-cpu") {
-						this.totalCpu = n;
-					} else if (n.type == "total-mem") {
-						this.totalMem = n;
-					} else if (n.type == "process-list") {
-						this.processList = n;
-					}
-				});
-			});
-		});
+		this._mo = new MutationObserver(this._mutationObserver.bind(this));
 
 		this._mo.observe(this, {
 			childList: true
 		});
+
+		// TODO: bug/feature? in previous commit we did not need to "trigger" mutation for initial children
+		this._mutationObserver([{addedNodes: this.childNodes}]);
 	}
 
 	disconnectedCallback ()
@@ -122,8 +133,12 @@ class OskudeSsetop extends HTMLElement
 		this.state.config.numCpus = parseInt(data[4], 10);
 		this.state.config.maxCpu = this.state.config.tick / (1000 / this.state.config.interval);
 
-		this.totalCpu.config = this.state.config;
-		this.processList.config = this.state.config;
+		if (this.totalCpu) {
+			this.totalCpu.config = this.state.config;
+		}
+		if (this.processList) {
+			this.processList.config = this.state.config;
+		}
 
 		this.jiffies = [];
 		for (let i = 0; i < this.state.config.numCpus; i++) {
@@ -133,6 +148,10 @@ class OskudeSsetop extends HTMLElement
 
 	onServerProcesses (e)
 	{
+		if (!this.processList) {
+			return;
+		}
+
 		let lines = e.data.split("\n");
 		let processData = {};
 
@@ -155,6 +174,10 @@ class OskudeSsetop extends HTMLElement
 
 	onServerTotalCpu (e)
 	{
+		if (!this.totalCpu) {
+			return;
+		}
+
 		let lines = e.data.split("\n");
 		let totalCpuData = [];
 
@@ -182,6 +205,10 @@ class OskudeSsetop extends HTMLElement
 
 	onServerTotalMem (e)
 	{
+		if (!this.totalMem) {
+			return;
+		}
+
 		let fields = e.data.split(" ");
 		let total = parseInt(fields[0], 10);
 		let free = parseInt(fields[1], 10);
@@ -209,4 +236,3 @@ window.customElements.define(
 	"oskude-ssetop",
 	OskudeSsetop
 );
-</script>

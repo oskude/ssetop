@@ -13,8 +13,6 @@
 #include <sys/socket.h>
 #include <microhttpd.h>
 #include <sys/stat.h>
-#include <regex.h>
-#include <libgen.h>
 
 int http_port = 55301;
 int wait_interval = 250;
@@ -260,59 +258,6 @@ void handle_options ()
 	if (env_root != NULL) app_root = env_root;
 }
 
-regex_t regex;
-int reti;
-/*****************************************************************************/
-void concat_possible_html_imports (
-	char *input_path,
-	FILE *out_stream
-) {
-	FILE *in_stream;
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t nread;
-	regmatch_t pmatch[1];
-
-	in_stream = fopen(input_path, "r");
-
-	if (in_stream == NULL) {
-		printf("html-import file not found: %s\n", input_path);
-		return;
-	}
-
-	while ((nread = getline(&line, &len, in_stream)) != -1) {
-		reti = regexec(&regex, line, 2, pmatch, REG_EXTENDED);
-		if (!reti) {
-			char *import_file = strndup(line + pmatch[1].rm_so, pmatch[1].rm_eo - pmatch[1].rm_so);
-			char *import_path = dirname(input_path);
-			strcpy(import_path, app_root);
-			strcat(import_path, "/");
-			strcat(import_path, import_file);
-			// TODO: do not concat file that is already concatted...
-			concat_possible_html_imports(import_path, out_stream);
-		} else {
-			fprintf(out_stream, line);
-		}
-	}
-
-	free(line);
-	fclose(in_stream);
-}
-
-/*****************************************************************************/
-void create_html_concat_file (
-	char *input_path,
-	char *output_path
-) {
-	FILE *out_stream;
-
-	out_stream = fopen(output_path, "wa");
-	concat_possible_html_imports(input_path, out_stream);
-
-	fclose(out_stream);
-}
-
-char *html_concat_path = "/tmp/ssetop-html-concat.html";
 /*****************************************************************************/
 int serve_file (const char *url, struct MHD_Connection *connection)
 {
@@ -321,15 +266,10 @@ int serve_file (const char *url, struct MHD_Connection *connection)
 	struct stat sbuf;
 	struct MHD_Response *response;
 	char req_path[256] = "";
+	char *mimetype = "text/html";
 
 	strcat(req_path, app_root);
 	strcat(req_path, url);
-
-	char *dot = strrchr(req_path, '.');
-	if (dot && !strcmp(dot, ".html")) {
-		create_html_concat_file(req_path, html_concat_path);
-		strcpy(req_path, html_concat_path);
-	}
 
 	if (
 		(-1 == (fd = open(req_path, O_RDONLY)))
@@ -347,7 +287,14 @@ int serve_file (const char *url, struct MHD_Connection *connection)
 		return ret;
 	}
 
+	char *dot = strrchr(req_path, '.');
+	if (!strcmp(dot, ".js")) {
+		mimetype = "application/javascript";
+	}
+
 	response = MHD_create_response_from_fd(sbuf.st_size, fd);
+	MHD_add_response_header(response, "Content-Type", mimetype);
+
 	ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
 	MHD_destroy_response(response);
 
@@ -412,13 +359,6 @@ int http_request_handler (
 int main ()
 {
 	handle_options();
-
-	int reti;
-	reti = regcomp(&regex, "rel=\"import\" href=\"([^\"]+)", REG_EXTENDED);
-	if (reti) {
-		fprintf(stderr, "Could not compile regex\n");
-		exit(1);
-	}
 
 	proc_dir = opendir("/proc");
 	stat_file = fopen("/proc/stat", "r");

@@ -5,9 +5,7 @@ PREFIX ?= /usr/local
 all: server client
 
 server:
-	# TODO: something in concat_possible_html_imports() triggers
-	# *** stack smashing detected *** without -fno-stack-protector
-	$(CC) -Wall -fno-stack-protector -lmicrohttpd -o ssetop-server server/main.c
+	$(CC) -Wall -lmicrohttpd -o ssetop-server server/main.c
 
 client:
 	mkdir -p client-build
@@ -29,18 +27,18 @@ install:
 	install -D -m755 ssetop-server "$(DESTDIR)$(PREFIX)/bin/ssetop-server"
 	install -D -m755 ssetop-client "$(DESTDIR)$(PREFIX)/bin/ssetop-client"
 	install -d "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/ssetop"
-	install -D webapp/*.html "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/"
-	install -D webapp/oskude/*.html "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/"
-	install -D webapp/oskude/ssetop/*.html "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/ssetop/"
+	install -D webapp/*.* "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/"
+	install -D webapp/oskude/*.* "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/"
+	install -D webapp/oskude/ssetop/*.* "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/ssetop/"
 	install -D -m644 scripts/ssetop-server.service "$(DESTDIR)$(PREFIX)/lib/systemd/system/ssetop-server.service"
 	install -D -m644 scripts/ssetop-client.desktop "$(DESTDIR)$(PREFIX)/share/applications/ssetop-client.desktop"
 
 uninstall:
 	rm -f "$(DESTDIR)$(PREFIX)/bin/ssetop-server"
 	rm -f "$(DESTDIR)$(PREFIX)/bin/ssetop-client"
-	rm -f "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/ssetop/"*.html
-	rm -f "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/"*.html
-	rm -f "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/"*.html
+	rm -f "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/ssetop/"*.*
+	rm -f "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/"*.*
+	rm -f "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/"*.*
 	rmdir "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude/ssetop" || true
 	rmdir "$(DESTDIR)$(PREFIX)/share/ssetop/webapp/oskude" || true
 	rmdir "$(DESTDIR)$(PREFIX)/share/ssetop/webapp" || true

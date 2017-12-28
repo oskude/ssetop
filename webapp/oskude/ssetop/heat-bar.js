@@ -1,12 +1,10 @@
-<link rel="import" href="/oskude/ssetop/responsive-canvas.html"/>
+import {OskudeSsetopResponsiveCanvas} from "/oskude/ssetop/responsive-canvas.js";
 
-<script>
-class OskudeSsetopHeatBar extends OskudeSsetopResponsiveCanvas
+export class OskudeSsetopHeatBar extends OskudeSsetopResponsiveCanvas
 {
 	constructor ()
 	{
 		super();
-
 		this.state = {
 			barColor: "hsla(120, 100%, 30%, 0.4)",
 			fadeColor: "hsla(0, 100%, 0%, 0.15)",
@@ -40,4 +38,3 @@ window.customElements.define(
 	'oskude-ssetop-heat-bar',
 	OskudeSsetopHeatBar
 );
-</script>

@@ -1,31 +1,25 @@
-<link rel="import" href="/oskude/ssetop/heat-bar.html"/>
+import {OskudeSsetopHeatBar} from "/oskude/ssetop/heat-bar.js";
 
-<template id="template-total-cpu">
-	<style>
-		.total-cpu-usage {
-			height: 0.75rem;
-			margin-bottom: 1px;
-		}
-	</style>
-	<div id="total-cpu-usage"></div>
-</template>
-
-<template id="template-total-cpu-entry">
-	<oskude-ssetop-heat-bar class="total-cpu-usage"></oskude-ssetop-heat-bar>
-</template>
-
-<script>
-class OskudeSsetopTotalCpu extends HTMLElement
+export class OskudeSsetopTotalCpu extends HTMLElement
 {
 	constructor ()
 	{
 		super();
-		const root = this.attachShadow({mode:"open"});
-		const template = document.querySelector('#template-total-cpu');
-
-		root.appendChild(template.content.cloneNode(true));
-		this.totalCpuUsageRoot = root.querySelector("#total-cpu-usage");
-		this.totalCpuEntryTemplate = document.querySelector("#template-total-cpu-entry");
+		this.attachShadow({mode:"open"});
+		this.shadowRoot.innerHTML = `
+			<style>
+				.total-cpu-usage {
+					height: 0.75rem;
+					margin-bottom: 1px;
+				}
+			</style>
+			<div id="total-cpu-usage"></div>
+			<template id="template-total-cpu-entry">
+				<oskude-ssetop-heat-bar class="total-cpu-usage"></oskude-ssetop-heat-bar>
+			</template>
+		`;
+		this.totalCpuUsageRoot = this.shadowRoot.querySelector("#total-cpu-usage");
+		this.totalCpuEntryTemplate = this.shadowRoot.querySelector("#template-total-cpu-entry");
 		this.type = "total-cpu";
 		this.state = {
 			tick: 0,
@@ -82,4 +76,3 @@ window.customElements.define(
 	'oskude-ssetop-total-cpu',
 	OskudeSsetopTotalCpu
 );
-</script>

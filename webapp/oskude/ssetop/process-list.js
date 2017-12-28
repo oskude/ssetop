@@ -1,70 +1,65 @@
-<link rel="import" href="/oskude/ssetop/heat-bar.html"/>
-<link rel="import" href="/oskude/ssetop/multi-bar.html"/>
+import {OskudeSsetopHeatBar} from "/oskude/ssetop/heat-bar.js";
+import {OskudeSsetopMultiBar} from "/oskude/ssetop/multi-bar.js";
 
-<template id="template-process-list">
-	<style>
-		:host {
-			display: block;
-			contain: content;
-		}
-		.process-entry {
-			display: grid;
-			grid-template-columns: 100%;
-		}
-		.cmd-name {
-			grid-column: 1;
-			grid-row: 1;
-			word-break: keep-all;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-		.mem-usage {
-			z-index: 100;
-			grid-column: 1;
-			grid-row: 1;
-			justify-self: end;
-			padding: 2px 0;
-		}
-		.cpu-usage {
-			grid-column: 1;
-			grid-row: 2;
-			height: 1px;
-		}
-		.strike-out {
-			display: none;
-		}
-	</style>
-	<div id="process-list">
-		<div id="entry-root"></div>
-	</div>
-</template>
-
-<template id="template-process-entry">
-	<div class="process-entry strike-out">
-		<div class="cmd-name"></div>
-		<oskude-ssetop-multi-bar class="mem-usage"
-			max-value="64"
-			line-space="2"
-			direction="up"
-			start-from="right"
-		></oskude-ssetop-multi-bar>
-		<oskude-ssetop-heat-bar class="cpu-usage"></oskude-ssetop-heat-bar>
-	</div>
-</template>
-
-<script>
-class OskudeSsetopProcessList extends HTMLElement
+export class OskudeSsetopProcessList extends HTMLElement
 {
 	constructor ()
 	{
 		super();
-		const root = this.attachShadow({mode:"open"});
-		const tpl = document.querySelector('#template-process-list');
+		this.attachShadow({mode:"open"});
+		this.shadowRoot.innerHTML = `
+			<style>
+				:host {
+					display: block;
+					contain: content;
+				}
+				.process-entry {
+					display: grid;
+					grid-template-columns: 100%;
+				}
+				.cmd-name {
+					grid-column: 1;
+					grid-row: 1;
+					word-break: keep-all;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+				.mem-usage {
+					z-index: 100;
+					grid-column: 1;
+					grid-row: 1;
+					justify-self: end;
+					padding: 2px 0;
+				}
+				.cpu-usage {
+					grid-column: 1;
+					grid-row: 2;
+					height: 1px;
+				}
+				.strike-out {
+					display: none;
+				}
+			</style>
+			<div id="process-list">
+				<div id="entry-root"></div>
+			</div>
 
-		root.appendChild(tpl.content.cloneNode(true));
-		this.entryRoot = root.querySelector("#entry-root");
-		this.processEntryTemplate = document.querySelector("#template-process-entry");
+			<template id="template-process-entry">
+				<div class="process-entry strike-out">
+					<div class="cmd-name"></div>
+					<oskude-ssetop-multi-bar class="mem-usage"
+						max-value="64"
+						line-space="2"
+						direction="up"
+						start-from="right"
+					></oskude-ssetop-multi-bar>
+					<oskude-ssetop-heat-bar class="cpu-usage"></oskude-ssetop-heat-bar>
+				</div>
+			</template>
+		`;
+		this.entryRoot = this.shadowRoot.querySelector("#entry-root");
+		this.processEntryTemplate = this.shadowRoot.querySelector("#template-process-entry");
 		this.type = "process-list";
 		this.state = {
 			tick: 0,
@@ -169,4 +164,3 @@ window.customElements.define(
 	'oskude-ssetop-process-list',
 	OskudeSsetopProcessList
 );
-</script>
